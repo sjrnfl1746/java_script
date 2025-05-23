@@ -11,35 +11,44 @@
         }
 
         div {
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-		}
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            align-items: center;
+        }
+
         .btn {
             width: 100px;
             height: 30px;
             background-color: blue;
             color: white;
-			margin: 20px;
+            margin: 20px;
         }
 	</style>
 </head>
 <body>
 <div>
 	<button class="btn" onclick="cal()">나이 계산하기</button>
-	<hr>
+</div>
+<hr>
+<div>
 	<div id="result" class="show">(결과 값 표시)</div>
 	<script>
-		// 올해 연도를 저장할 수 있는 변수
-		const thisYear = 2025;
+        /*
+		1. thisYear을 프로그램이 실행되는 시점의 연도를 가지고 오도록.
+		2. birthYear을 사용자에게 입력을 받도록.
+		3. 문자열 부분을 템플릿 문자열로 변경.
+		 */
+        // 올해 연도를 저장할 수 있는 변수
+        const thisYear = new Date().getFullYear();
         // 태어난 연도를 저장할 수 있는 변수
-		const birthYear = 2000;
+        const birthYear = Number(prompt('태어난 연도를 입력하세요.', 'YYYY')); // 태어난 연도를 저장할 변수
 
         let age; // 계산한 나이를 저장할 변수
         age = thisYear - birthYear + 1;
         document.querySelector('#result').innerHTML = `당신의 나이는 ${age}  세입니다.`;
 	</script>
-	<hr>
 </div>
+<hr>
 </body>
 </html>

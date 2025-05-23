@@ -1,10 +1,24 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+	<meta charset="UTF-8">
+	<title>Title</title>
 </head>
 <body>
-$END$
+<script>
+  /*
+  사용자에게 나이와 이름을 입력받고 화면 (document)에 출력하는 코드를 완성하세요.
+  예)
+  나이를 입력해 주세요 > 30
+  이름을 입력해 주세요 > 홍길동
+
+  이름은 홍길동이고, 나이는 30세 입니다.
+
+   */
+  let age = prompt('나이를 입력해 주세요 > ');
+  let name = prompt('이름을 입력해 주세요 > ');
+  document.write('이름은 <b>' + name + '</b>이고, 나이는 ' + age + '세 입니다.');
+  document.write(`이름은 ${name}이고, 나이는 ${age}세 입니다.`);
+</script>
 </body>
 </html>

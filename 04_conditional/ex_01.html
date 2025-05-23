@@ -1,10 +1,26 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+	<meta charset="UTF-8">
+	<title>Title</title>
+  <script>
+    /*
+    나이를 입력받아 다음과 같이 출력하세요.
+    0 ~ 12 : 어린이 / 13 ~ 18 : 청소년 / 19 ~ 64 : 성인 / 65세 이상 : 노인
+     */
+    const age = Number(prompt('나이를 입력해주세요.'))
+    if (age >= 0 && age < 13) {
+      alert('어린이')
+    } else if (age < 19) {
+      alert('청소년')
+    } else if (age < 65) {
+      alert('성인')
+    } else {
+      alert('노인')
+    }
+  </script>
 </head>
 <body>
-$END$
+
 </body>
 </html>
