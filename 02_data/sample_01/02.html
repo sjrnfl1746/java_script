@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        div {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+		}
+        .btn {
+            width: 100px;
+            height: 30px;
+            background-color: blue;
+            color: white;
+			margin: 20px;
+        }
+	</style>
+</head>
+<body>
+<div>
+	<button class="btn" onclick="cal()">나이 계산하기</button>
+	<hr>
+	<div id="result" class="show">(결과 값 표시)</div>
+	<hr>
+</div>
+</body>
+</html>
