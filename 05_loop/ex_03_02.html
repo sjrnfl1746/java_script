@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+  <script>
+    /*
+    금액으로 구매할 수 있는 최대 잔수를 구한 후, for 문의 조건에 이용.
+     */
+    let money = Number(prompt(`자판기에 얼마를 넣을까요? >>>`));
+    const coffee = 300;
+    const maxCoffee = parseInt(money / coffee); // 금액으로 구매할 수 있는 최대 잔수
+    // document.write(maxCoffee);
+    for (let cup = 1; cup <= maxCoffee; cup++) {
+      money -= coffee;
+      document.write(`커피 ${cup}잔, 잔돈 ${money}원<br>`);
+    }
+  </script>
+</head>
+<body>
+
+</body>
+</html>

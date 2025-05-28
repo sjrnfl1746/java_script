@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+  <script>
+    /*
+    20부터 10까지 출력을 하세요.
+    짝수는 파란색, 홀수는 빨간색으로 출력하세요.
+     */
+   for (let i = 20; i >= 10; i--) {
+     if (i % 2 === 0) {
+       document.write(`<p style="color: blue;">${i}</p>`);
+     } else {
+       document.write(`<p style="color: red;">${i}</p>`);
+     }
+   }
+   document.write('<hr>');
+
+   for (let i = 20; i >= 10; i--) {
+     document.write(i % 2 === 0 ? `<p style="color: blue;">${i}</p>` : `<p style="color: red;">${i}</p>`);
+   }
+  </script>
+</head>
+<body>
+
+</body>
+</html>

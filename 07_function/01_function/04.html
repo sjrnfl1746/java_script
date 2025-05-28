@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<script>
+        // compute(); // Uncaught ReferenceError: compute is no defined
+	</script>
+	<script>
+        compute();
+        function compute() {
+            let x = 10;
+            let y = 100;
+            let result = x / y;
+            console.log(result);
+        }
+
+        compute();
+	</script>
+	<script>
+        // 선언적 함수의 재정의 기능
+        compute(); // 1000
+        function compute() {
+            let x = 10;
+            let y = 100;
+            let result = x * y;
+            console.log(result);
+        }
+        compute();
+	</script>
+	<script>
+		compute();
+	</script>
+</head>
+<body>
+
+</body>
+</html>

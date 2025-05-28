@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+  <script>
+    // 평균 점수를 기준으로 학점을 출력
+    const kor = 88, eng = 90, mat = 58, soc = 81, sci = 72;
+    const total = kor + eng + mat + soc + sci; // 총점
+    const average = total / 5; // 평균
+
+    console.log(average); // 77.8
+    console.log(parseInt(average / 10)); // 7
+    // 평균의 범위 : 0 ~ 100 -> 0 ~ 10
+
+    // parseInt() : 실수를 정수로. 반올림은 하지않고 소수점 이하만 버림.
+    switch (parseInt(average / 10)) {
+      case 10: case 9:
+        document.write('A');
+        break;
+      case 8:
+        document.write('B');
+        break;
+      case 7:
+        document.write('C');
+        break;
+      case 6:
+        document.write('D');
+        break;
+      default:
+        document.write('F');
+        break;
+    }
+
+  </script>
+</head>
+<body>
+
+</body>
+</html>

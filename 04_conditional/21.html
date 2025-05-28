@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<script>
+		/*
+
+		 */
+        //  사용자에게 숫자를 입력 받아서 짝수, 홀수 구분
+        // 변수를 선언.
+        const input = Number(prompt('숫자를 입력하세요.', '숫자'));
+
+        // 조건문
+        switch (input % 2) { // 나머지 연산자를 이용해서 홀수와 짝수를 구분.
+            case 0:
+                alert('짝수입니다.');
+                break;
+            case 1:
+                alert('홀수입니다.');
+                break;
+			default:
+                alert('숫자가 아닙니다.'); // 숫자가 아닌걸 입력하더라도 %연산에서 에러가 나지 않음.
+				break;
+        }
+	</script>
+</head>
+<body>
+
+</body>
+</html>
