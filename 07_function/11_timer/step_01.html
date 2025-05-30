@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+</head>
+<body>
+<div id="timer">0</div>
+<script>
+    /* 1초마다 값을 증가시키며 화면에 표시 */
+    document.addEventListener('DOMContentLoaded', function () {
+        let count = 0;
+        setInterval(function () {
+            document.querySelector('#timer').innerHTML = String(count);
+            count++;
+        }, 1000)
+    })
+
+</script>
+</body>
+</html>

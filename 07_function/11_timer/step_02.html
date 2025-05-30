@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        div {
+			height: 100vh;
+            display: flex;
+            flex-direction: column;
+			justify-content: center;
+        }
+
+        #timer {
+            font-size: 200px;
+            text-align: center;
+        }
+	</style>
+</head>
+<body>
+<div>
+	<div id="timer"></div>
+	<button onclick="stopTimer()">정지</button>
+</div>
+<script>
+    /*
+	1. 숫자가 화면 중앙에 크게 나오도록 수정
+	2. 타이머 색상이 무지개 색상으로 변경되도록 수정
+	*/
+        const rainbow = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet']
+
+        let count = 0;
+        const id = setInterval(function () {
+            document.querySelector('#timer').style.color = rainbow[count % rainbow.length];
+            document.querySelector('#timer').innerHTML = String(count);
+            count++;
+        }, 1000)
+
+        const stopTimer = () => {
+            clearInterval(id);
+        }
+
+</script>
+</body>
+</html>
