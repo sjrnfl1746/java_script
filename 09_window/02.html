@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelector('#move').addEventListener('click', () => {
+                location.href = 'https://www.naver.com/'
+            })
+            document.getElementById('replace').addEventListener('click', () => {
+                location.replace('https://www.naver.com/');
+            })
+            document.getElementById('replaceTimer').addEventListener('click', () => {
+                setTimeout(() => location.replace('https://www.naver.com/'), 3 * 1000)
+            })
+			document.querySelector('#reload').addEventListener('click', () => {
+                location.reload();
+			})
+            document.querySelector('#hash').addEventListener('click', () => {
+                location.hash = '#target';
+            })
+        })
+	</script>
+</head>
+<body>
+<button id="move">네이버로 이동</button>
+<button id="replace">기록 없이 네이버로 이동</button>
+<button id="replaceTimer">3초후 네이버로 이동</button>
+<button id="reload">페이지 새로 고침</button>
+<button id="hash">target으로 스크롤</button>
+
+<div id="target"></div>
+</body>
+</html>

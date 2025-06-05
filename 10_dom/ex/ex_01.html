@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    #gallery {
+      text-align: center;
+    }
+  </style>
+  <script>
+    /*
+    1. 코드를 DOMContentLoaded 이벤트 발생시 실행이 되도록 수정.
+	2. 이벤트 핸들러 어트리뷰트 방식은 제거하고 이벤트 핸들러 메서드 방식으로 이벤트 처리.
+	3. 익명 함수만 사용할 것.
+     */
+    document.addEventListener('DOMContentLoaded', () => {
+      // const imgTag = document.querySelector('#photo');
+      // const button1 = document.querySelector('#gallery p button:nth-of-type(1)');
+      // const button2 = document.querySelector('#gallery p button:nth-of-type(2)');
+      //
+      // let num = 1;
+      // // 이전
+      // button1.addEventListener('click', () => {
+      //   if (num === 1) {
+      //     alert(`처음 이미지 입니다.`);
+      //   }
+      //   imgTag.setAttribute('src', `img/pic_${(num === 1) ? num = 9 : --num}.jpg`);
+      // })
+      //
+      // // 다음
+      // button2.addEventListener('click', () => {
+      //   if (num === 9) {
+      //     alert(`마지막 이미지 입니다.`);
+      //   }
+      //   imgTag.setAttribute('src', `img/pic_${(num === 9) ? num = 1 : ++num}.jpg`);
+      // })
+
+      const buttons = document.querySelectorAll('#gallery p button');
+      const imgTag1 = document.querySelector('#photo');
+      let num = 1;
+      buttons.forEach(button => {
+        if (button.textContent === '다음') {
+          button.addEventListener('click', () => {
+            if (num === 9) {
+              alert(`마지막 이미지 입니다.`);
+            }
+            imgTag1.setAttribute('src', `img/pic_${(num === 9) ? num = 1 : ++num}.jpg`);
+          })
+        } else {
+          button.addEventListener('click', () => {
+            if (num === 1) {
+              alert(`처음 이미지 입니다.`);
+            }
+            imgTag1.setAttribute('src', `img/pic_${(num === 1) ? num = 9 : --num}.jpg`);
+          })
+        }
+      })
+
+    })
+  </script>
+</head>
+<body>
+<div id="gallery">
+  <p><img src="img/pic_1.jpg" alt="" id="photo"></p>
+  <p>
+    <button>이전</button>
+    <button>다음</button>
+  </p>
+</div>
+</body>
+</html>

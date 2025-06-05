@@ -31,4 +31,31 @@ readyState 프로퍼티의 초깃값은 "loading"이라는 문자열.
 마지막으로 웹 브라우저는 Window 객체를 상태로 load 이벤트를 발생.
 
 9) 이 시점부터 다양한 이벤트(사용자 정의 이벤트, 네트워크 이벤트)를 수신하며, 이벤트가 발생하면 이벤트 처리기가 비동기로 호출됨.
+
+* 렌더링 과정에서 발생하는 이벤트
+Document 의 DOMContentLoaded -> Window 의 Load
+ */
+
+/*
+* async와 defer 속성
+async 와 defer 속성은 script 요소의 논리 속성으로 HTML5부터 추가된 속성.
+둘 다 src 속성을 가진 script 요소에는 적용할 수 있지만 인라인 스크립트에는 사용할 수 없음.
+이들 속성을 사용하면 자바스크립트 코드를 실행할 때 HTML 구문 분석을 막지 않음.
+현재의 주요 웹브라우저에서는 두 개의 속성을 모두 지원.
+
+<script async src="../script/common.js>
+<script defer src="../script/common.js>
+
+script 요소에
+1. async 속성을 설정하면 script 요소의 코드가 비동기적으로 실행.
+즉 HTML 문서의 구문 분석 처리를 막지 않으며 script 요소의 코드를 최대한 빨리 실행.
+여러 개의 script 요소에 async 속성을 설정하면 다 읽어 들인 코드부터 비동기적으로 실행하므로 실행 순서가 보장되지 않음.
+읽어 들이는 순서에 의존하는 script 요소에는 async 속성을 설정하지 말아야 함.
+
+2. defer 속성을 설정한 script 요소는 DOM 트리 구축이 끝난 후에 실행.
+DOM 구축이 끝난 후에 실행되기 때문에 자바스크립트 코드로 요소 객체에 이벤트 처리기을 등록하는 등의 초기화 작업을 할 수 있음.
+따라서 defer 속성은 DOMContentLoaded 이벤트의 대안으로 활용할 수 있음.
+
+async 또는 defer 속성이 설정된 script 요소에 document.write 메서드가 있으면 async와 defer 속성이 무시되어 동기적으로 실행됨.
+async 와 defer 속성을 지원하지 않는 웹 브라우저에서도 script 요소를 동기적으로 실행.
  */

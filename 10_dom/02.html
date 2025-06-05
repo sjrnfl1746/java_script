@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<script>
+		/*
+		* DOMContentLoaded 이벤트
+		DOMContentLoaded는 웹 브라우저가 문서를 모두 읽고 나서 실행하는 이벤트
+
+		* 문서 객체.addEventListener(이벤트 이름, 콜백 함수);
+		이벤트가 발생할 때 실행할 함수(콜백 함수)를 이벤트 리스너 event listener 또는
+		이벤트 핸들러 event handler 라고 부름.
+		 */
+
+		// DOMContentLoaded 이벤트를 연결. DOMContentLoaded 상태가 되었을때 콜백 함수를 호출.
+		document.addEventListener("DOMContentLoaded", () => {
+            const h1 = (text) => `<h1>${text}</h1>`;
+            document.body.innerHTML += h1('DOMContentLoaded 이벤트 발생');
+		});
+	</script>
+</head>
+<body>
+
+</body>
+</html>
