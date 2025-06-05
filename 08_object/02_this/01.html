@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<script>
+        /*
+		화살표 함수를 이용한 메서드
+		익명 함수와 화살표 함수는 객체의 메서드로 사용될 때 this 키워드 다루는 방식이 다름.
+		익명 함수는 개체를 반환하지만
+		화살표 함수는 기본적으로 window 객체를 반환하고, 상황에 따라 또 다른 객체를 반환할 수 있음.
+		따라서 화살표 함수는 메서드에서 잘 사용하지 않음.
+		 */
+        const test = {
+            a: function () { // 익명함수로 선언
+                console.log(this);
+            },
+            b: () => { // 화살표 함수로 선언
+                console.log(this);
+            }
+        }
+
+        test.a();
+        test.b();
+	</script>
+</head>
+<body>
+
+</body>
+</html>
