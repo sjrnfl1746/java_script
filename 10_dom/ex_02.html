@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<script>
+        /*
+		https://placecats.com/ 에서 너비, 높이 600인 이미지를 들고와서,
+		img 객체를 생성하고 속성으로 너비 300, 높이 300지정. object-fit은 cover로 지정
+		div에 요소로 추가
+		 */
+        document.addEventListener('DOMContentLoaded', () => {
+			const url = 'https://placecats.com/600/600';
+            const img = document.createElement('img');
+
+            img.src = url;
+
+            document.querySelector('div').appendChild(img);
+            img.style.width = '300px';
+            img.style.height = '300px';
+            img.style.objectFit = 'cover';
+        })
+	</script>
+</head>
+<body>
+<div></div>
+</body>
+</html>

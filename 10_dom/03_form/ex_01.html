@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<script>
+		/*
+		아래의 폼에서 이름(input)에 아무것도 입력하지 않으면 제출되지 않도록 JavaScript 코드를 작성하세요.
+
+		1. Form 태그에서 액션경로를 지정하지 않으면 기본값은 자기자신이다.
+		 */
+		document.addEventListener("DOMContentLoaded", () => {
+            const button = document.querySelector('button');
+            const myForm = document.querySelector('#myForm');
+            const nameInput = document.querySelector('#nameInput');
+
+            button.addEventListener("click", (e) => {
+                e.preventDefault();
+                // alert(nameInput.value);
+                if (nameInput.value === "") { // 유효성 검사
+                    alert('이름을 입력해주세요~~~')
+					return;
+				}
+                myForm.submit();
+			})
+		})
+	</script>
+</head>
+<body>
+<form id="myForm" method="get">
+	<label>이름: <input type="text" name="name" id="nameInput"></label>
+	<button type="submit">제출</button>
+</form>
+</body>
+</html>

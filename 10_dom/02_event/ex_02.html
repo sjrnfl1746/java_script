@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<script>
+        /*
+		1. id가 changeTextButton인 버튼을 클릭하면
+		id가 title인 요소의 텍스트가 "Hello, JavaScript!"로 변경되도록 구현하세요.
+		2. id가 toggleButton인 버튼을 클릭할 때마다
+		<body>의 배경색이 회색 -> 흰색 -> 주황색으로 토글되도록 구현하세요.
+		3. id가 addItemButton인 버튼을 클릭하면 id가 itemList인 ul 요소에 새로운 li 아이템이 추가되도록 구현하세요.
+		새로 추가되는 li의 텍스트는 Item X 형식으로, 마지막 li 아이템의 순서 번호에 1을 더한 값이 되도록 합니다.
+		예를 들어, 마지막 li가 Item 2일 경우, 새로운 li는 Item 3으로 추가됩니다.
+
+		모든 작업은 자바스크립트 코드에서 이루어지며, HTML은 수정하지 않습니다.
+		 */
+        document.addEventListener("DOMContentLoaded", () => {
+            // 요소 가져오기
+            const h1 = document.getElementById('title');
+            const changeTextButton = document.getElementById('changeTextButton');
+            const toggleButton = document.getElementById('toggleButton');
+            const addItemButton = document.getElementById('addItemButton');
+            const itemList = document.getElementById('itemList');
+
+            // 1.
+            changeTextButton.addEventListener('click', (e) => {
+                h1.textContent = 'Hello, JavaScript!';
+            })
+
+            // 2.
+            toggleButton.addEventListener('click', (e) => {
+                let idx = 0;
+                const bg = document.body.style.backgroundColor;
+                console.log(bg);
+                const bgs = ['gray', 'white', 'orange'];
+                document.body.style.backgroundColor = bgs[idx++ % bgs.length];
+
+                if (bg === '') {
+                    document.body.style.backgroundColor = 'gray';
+                } else if (bg === 'gray') {
+                    document.body.style.backgroundColor = 'white';
+                } else if (bg === 'white') {
+                    document.body.style.backgroundColor = 'orange';
+                } else {
+                    document.body.style.backgroundColor = '';
+                }
+            })
+
+			// 3.
+			addItemButton.addEventListener('click', (e) => {
+                const li = document.createElement('li');
+                const cnt = document.querySelectorAll('#itemList li').length;
+
+                li.textContent = `Item ${cnt + 1}\n`;
+                itemList.appendChild(li);
+			})
+        })
+	</script>
+</head>
+<body>
+<h1 id="title">Click Event Practice</h1>
+<button id="changeTextButton">텍스트 변경</button>
+<button id="toggleButton">토글 배경색</button>
+<button id="addItemButton">아이템 추가</button>
+<ul id="itemList">
+	<li class="item">Item 1</li>
+	<li class="item">Item 2</li>
+</ul>
+</body>
+</html>

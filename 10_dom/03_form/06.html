@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<script>
+        /*
+		체크박스 활용하기
+		체크박스의 체크 상태를 확인할 때는 입력양식의 checked 속성을 사용.
+
+		체크 상태일때만 타이머를 증가시키는 프로그램.
+		 */
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. 요소 들고오기
+            const checkbox = document.querySelector('input')
+            const h1 = document.querySelector('h1')
+
+            let id;
+            let timer = 0;
+
+            // 2. 이벤트 리스너 등록
+			checkbox.addEventListener('change', (e) => { // 체크 상태
+                console.log(e.target.checked);
+                if (e.target.checked) {
+                    id = setInterval(() => {
+                        h1.textContent = `${timer++}초`
+					}, 1000)
+				} else { // 체크 상태 해제
+                    clearInterval(id);
+				}
+			})
+        })
+	</script>
+</head>
+<body>
+<label>
+	<input type="checkbox">
+</label>
+<span>타이머 활성화</span>
+<h1></h1>
+</body>
+</html>
