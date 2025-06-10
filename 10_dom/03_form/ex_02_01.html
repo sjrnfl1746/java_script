@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script>
+    /*
+        아래의 폼에서 사용자가 데이터를 입력한 후 제출 버튼을 누르면,
+        페이지 이동 없이 데이터 객체로 수집하고 콘솔에 출력되도록 하세요.
+     */
+    document.addEventListener('DOMContentLoaded', () => {
+      const textInput = document.querySelector('input[name="username"]');
+      const emailInput = document.querySelector('input[name="email"]');
+      const button = document.querySelector('button');
+      const data = { name: "", email: "" }
+
+      button.addEventListener('click', (event) => {
+        event.preventDefault();
+        if (textInput.value === '') {
+          alert("please enter your name!!");
+          return;
+        }
+        if (emailInput.value === '') {
+          alert("please enter your email address!!");
+          return;
+        }
+        data.name = textInput.value;
+        data.email = emailInput.value;
+        alert(`${data.name}님 환영합니다!`);
+        console.log(data);
+      });
+    });
+
+  </script>
+</head>
+<body>
+<form id="userForm">
+  <input type="text" name="username" placeholder="아이디">
+  <input type="email" name="email" placeholder="이메일">
+  <button type="submit">제출</button>
+</form>
+</body>
+</html>
