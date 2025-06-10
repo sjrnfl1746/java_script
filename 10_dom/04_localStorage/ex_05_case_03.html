@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<script>
+        /*
+		할 일 목록을 추가하는 간단한 웹 페이지를 만드세요.
+		사용자가 새로고침해도 이전에 추가한 할 일 목록이 유지되도록 localStorage를 활용하세요.
+
+		1. 할 일 추가: 사용자가 todoInput에 할 일을 입력하고 addButton을 클릭하면,
+		todoList에 새로운 할 일 항목이 추가됩니다.
+		할 일이 비어있지 않을 때만 추가되도록 하세요.
+		2. 저장 및 불러오기: 추가된 할 일 목록은 localStorage에 저장되고,
+		페이지를 새로고침하더라도 목록이 유지되도록 합니다.
+
+		3. 전체 삭제
+		 */
+        /*
+		point
+		1) li를 추가 -> 요소를 생성해서 부모 요소에 추가
+
+		2) 개별 할 일을 따로 저장할 것인가, 배열로 처리해서 배열을 저장할 것인가?
+		- to do가 여러개일 때는
+		a) 중복이 안되는 키를 생성해서 개별 저장하거나
+		2) 배열로 해서 하나로 저장하는 방법이 있음.
+		 */
+        // case 1. 개별 할 일을 저장.
+        // 할 일이 10개이면 키도 10개가 필요 (키는 중복이 안됨.) 자동 증가하는 정수로 처리
+        document.addEventListener('DOMContentLoaded', () => {
+            // 초기값
+            let todos = []
+
+            //  1. 요소 불러오기
+            const todoInput = document.getElementById('todoInput')
+            const addButton = document.getElementById('addButton')
+            const clearButton = document.getElementById('clearButton')
+            const todoList = document.getElementById('todoList')
+
+            // 2. 이벤트 리스너 등록
+            addButton.addEventListener('click', () => {
+                // 할 일이 비어있지 않을 때만 추가
+                const todo = todoInput.value.trim();
+                if (!todo) {
+                    return;
+                }
+
+                // 1. 배열 추가
+                todos.push(todo)
+                // console.log(todos)
+
+                // 2. html 요소 추가
+                const li = document.createElement('li');
+                li.textContent = todo;
+                todoList.appendChild(li);
+                todoInput.value = ''
+
+                clearButton.addEventListener('click', () => {
+                    todoList.innerHTML = '';
+                    todos = []
+                })
+
+                // 3. localStorage 저장
+                localStorage.setItem('todos', todos.join('|'))
+                console.log(todos.join('|')) // 1|2|3|4
+            })
+
+            clearButton.addEventListener('click', () => {
+                todoList.innerHTML = '';
+                todos.splice(0, todoList.length)
+				localStorage.clear();
+            })
+			// 3. 새로 고침시 적용
+			if (localStorage.getItem('todos')) {
+                console.log(localStorage.getItem('todos'));
+                const todosArr = localStorage.getItem('todos').split('|') // 문자열을 배열로
+
+				// li 생성 후 반영
+				todosArr.forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = item;
+                    todoList.appendChild(li);
+                    todos.push(item);
+				})
+
+			}
+
+        })
+	</script>
+</head>
+<body>
+<h1>My To-Do List</h1>
+<label for="todoInput"></label><input type="text" id="todoInput" placeholder="Add a new task">
+<button id="addButton">Add</button>
+<button id="clearButton">Clear</button>
+<ul id="todoList"></ul>
+</body>
+</html>
