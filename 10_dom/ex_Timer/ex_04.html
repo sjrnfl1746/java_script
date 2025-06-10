@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+  <script>
+
+    /*
+        사용자가 타이머를 설정하고 시작할 수 있는 웹 페이지를 만드세요.
+         설정한 시간은 localStorage에 저장되어, 페이지를 새로고침해도 마지막으로 설정한 시간이 유지됩니다.
+         타이머가 종료되면 “Time’s up!” 메시지를 표시하세요.
+
+        요구사항:
+
+        1.	타이머 시작: 사용자가 timerInput에 시간을 입력하고 startTimerButton을 클릭하면,
+        해당 시간부터 타이머가 1초씩 감소합니다.
+        2.	시간 저장: 타이머가 시작될 때 설정된 시간을 localStorage에 저장하여 페이지를 새로고침해도
+        마지막 설정 시간이 유지되도록 합니다.
+        3.	시간 불러오기: 페이지가 로드될 때 localStorage에 저장된 시간이 있다면 불러와서
+        timerDisplay에 남은 시간을 표시합니다.
+        4.	타이머 종료: 타이머가 0이 되면 “Time’s up!” 메시지를 표시합니다.
+
+
+        * 예외 경우
+        - 버튼을 두번 눌렀을때 타이머가 중복으로 실행될경우
+        - 타이머가 음수일경우
+        - 택스트 키업이아니라 택스트 옆에 버튼으로 숫자 입력한 경우
+        - 타이머에 저장된 값이 남아있을 경우
+
+	 */
+
+      document.addEventListener('DOMContentLoaded', ()=>{
+        const input = document.getElementById('timerInput');
+        const button = document.getElementById('startTimerButton');
+        const display = document.getElementById('timerDisplay');
+        let time = Number(localStorage.getItem('timer'));
+        let timerId = null;
+
+
+        // 타이머 함수
+        const simpleTimer = ()=>{
+          timerId = setInterval(() => {
+            if (time <= 0) {
+              clearInterval(timerId);
+              localStorage.removeItem('timer');
+              display.textContent = "Time's Up!";
+              return;
+            }
+            display.textContent = `Time remaining: ${time--}`;
+            localStorage.setItem('timer', time.toString());
+          }, 1000);
+        }
+
+        // 택스트 상자에 입력시
+        input.addEventListener('keyup',()=> {
+            time = input.value;
+            localStorage.setItem('timer', time.toString());
+        });
+
+        // 버튼 클릭시
+        button.addEventListener('click',()=>{
+          if (timerId !== null) { // 실행된 타이머가 존제하면 제거해준다.
+            clearInterval(timerId);
+          }
+          if(time <= 0){ // 예외처리: 시간을 음수로 입력시
+            display.textContent = "[ERROR]: Please enter a valid timer!!!!";
+            return;
+          }
+          input.value = '';
+          simpleTimer(); // 택스트 상자에 입력된 시간으로 실행
+        });
+
+
+        // 로드시 화면 출력
+        if (time > 0) { // 만약 타이머에 시간이 존제한다면 재실행
+          display.textContent = `Time remaining: ${time}`;
+          simpleTimer();
+        } else {
+          display.textContent = "Time remaining: 0";
+        }
+
+
+      });
+  </script>
+</head>
+<body>
+  <h1>Simple Timer</h1>
+  <label><input type="number" id="timerInput" placeholder="Enter time in seconds"></label>
+  <button id="startTimerButton">Start Timer</button>
+  <p id="timerDisplay">Time remaining: </p>
+</body>
+</html>

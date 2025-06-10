@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<script>
+        /*
+		 	ex_06 todolist 에서 추가
+		 	- 체크박스 속성을 추가해 체크를 하게되면 바로 삭제가 되도록!
+
+		 	* 참고: localStorage 공간이 ex_06와 같아서 데이터 연동되어있음!
+	    */
+        document.addEventListener("DOMContentLoaded", function () {
+            const input = document.getElementById('todoInput'); // 텍스트 상자
+            const addButton = document.getElementById('addButton'); // 추가 버튼
+            const clearButton = document.getElementById('clearButton'); // 선택 삭제 버튼
+            const clearAllButton = document.getElementById('clearAllButton'); // 모두 삭제 버튼
+            const todoList = document.getElementById('todoList'); // 리스트
+
+            // 데이터 불러오기
+            let list = JSON.parse(localStorage.getItem('TodoList')) || []; // JSON 이 null 이면 빈배열 생성
+
+            // 데이터 찾기
+            const findData = (value) => {
+                let isData = false;
+                list.forEach((item) => {
+                    if (item === value) {
+                        isData = true; // 값이 존제하면 true 로 변경
+                    }
+                });
+                return isData;
+            }
+
+            // 체크 박스 선택유무 스타일 변경
+            const checkBoxToggle = (li) =>{
+                li.querySelector('input').addEventListener('change', (e) => {
+                    if (e.target.checked === true) { // 택스트 상자가 체크된 경우
+                        li.style.textDecorationLine = 'line-through';
+                        li.style.fontStyle = 'italic';
+                        li.style.color = '#b3b3b3';
+                        return;
+                    }
+                    // 텍스트 상자가 체크되지 않은 경우
+                    li.style.fontStyle = 'normal';
+                    li.style.textDecoration = 'none';
+                    li.style.color ='black';
+                });
+			}
+
+            // 데이터 리스트 출력
+            const showList = () => {
+                // 기존 데이터로 화면에 li 추가
+                list.forEach((item,index) => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<input type="checkbox" id="checkBox" data-idx="${index}"> ${item}`;
+                    checkBoxToggle(li); // 체크 박스 선택에 따른 스타일 변경
+                    todoList.appendChild(li);
+                });
+            }
+
+            // Add 버튼 클릭 시
+            addButton.addEventListener('click', function () {
+                const value = input.value.trim(); // 빈칸제거 후 저장
+                // 예외처리: 리스트에 이미 존제하는 경우
+				if (findData(value)) {
+					alert('리스트가 이미 존제합니다!');
+                    return;
+                }
+                // 예외처리: 택스트상자에 값이 없는경우
+                if (value === ''){
+                    alert('값을 입력해주세요!');
+                    return;
+                }
+                const li = document.createElement('li');
+                li.innerHTML = `<input type="checkbox" id="checkBox" data-idx="${list.length}"> ${value}`; // 인덱스 번호 추가를 위해 data-idx 추가
+                checkBoxToggle(li); // 체크 박스 선택에 따른 스타일 변경
+                todoList.appendChild(li);
+                list.push(value); //리스트에 추가
+                localStorage.setItem('TodoList', JSON.stringify(list)); //리스트 업그레이드
+                console.log(`updated :) [ ADD: ${value} (${li.querySelector('input').getAttribute('data-idx')})]`);
+                input.value = ''; // 택스트상자 비우기
+            });
+
+            // Clear 버튼 클릭시
+            clearButton.addEventListener('click', function () {
+                const value = input.value.trim(); // 택스트 상자에 입력된 값을 불러옴
+                // 예외처리: 택스트상자에 값이 없는경우
+                if (value === ''){
+                    alert('값을 입력해주세요!');
+                    return;
+                }
+                // 값이 존제하는 경우 제거
+                if(findData(value)){
+                    list.splice(list.indexOf(value), 1);
+                    localStorage.setItem('TodoList',JSON.stringify(list));
+                    console.log(`updated :) [ DELETE: ${value}]`);
+                    input.value = '';
+                    todoList.innerHTML =''; // 기존 li 제거
+                    showList(); // 리스트 재출력
+                    return;
+			   }
+                alert(`${value}가 리스트에 존제하지 않습니다!`);
+            });
+
+            // ClearAll 버튼 클릭 모두 삭제
+            clearAllButton.addEventListener('click', function () {
+                if(confirm('정말 모두 삭제하시겠습니까? \n삭제후에는 복구 할 수 없습니다.')){
+                    // 요소 초기화
+                    localStorage.clear();
+                    todoList.innerHTML = '';
+                    list = [];
+                    input.value = '';
+                    alert("모두 삭제 되었습니다!");
+                    console.log(`successfully cleared :)`);
+				}
+            });
+
+			showList();
+        });
+	</script>
+	<style>
+		body{
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			background-color: #aacaef;
+		}
+		h1{
+			font-size: 44px;
+		}
+
+		div input{
+			width: 500px;
+			height: 50px;
+			border-radius: 10px;
+			text-align: center;
+			font-size: 20px;
+		}
+		div button{
+			width: 100px;
+			height: 50px;
+			text-align: center;
+			border-radius: 5px;
+        }
+
+		ul{
+			background-color: white ;
+			width: 1000px;
+			height: 700px;
+			overflow-y: scroll;
+			padding: 20px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+		li{
+			list-style: none;
+			font-size: 30px;
+		}
+
+		input[type="checkbox"]{
+			width: 20px;
+			height: 20px;
+		}
+
+
+
+	</style>
+</head>
+<body>
+<h1>My To-Do List</h1>
+<div>
+	<label for="todoInput"></label><input type="text" id="todoInput" placeholder="Add a new task">
+	<button id="addButton">➕Add</button>
+	<button id="clearButton">🔎Clear</button>
+	<button id="clearAllButton">❌Clear All</button>
+</div>
+<ul id="todoList"></ul>
+</body>
+</html>
