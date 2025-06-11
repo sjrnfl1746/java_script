@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<link rel="stylesheet" href="./css/main.css">
+</head>
+<body>
+<div id="container">
+	<h1>참가 신청</h1>
+	<form action="">
+		<input type="text" id="userName" placeholder="이름" required>
+		<button>신청</button>
+	</form>
+	<hr>
+	<div id="nameList"></div>
+</div>
+<script>
+    /* 참가 신청 명단 프로그램 만들기
+    3. 선택한 노드를 삭제
+    1) 노드 생성시 버튼 추가 (<span class="del">X</span>
+    2) 생성된 버튼에 이벤트 추가
+    -> 새로 생성되는 요소는 생성시에 이벤트 리스너를 추가해야 함.
+	 */
+
+	// 요소 불러오기
+	const button = document.querySelector('button');
+	const input = document.querySelector('input');
+    const nameList = document.getElementById('nameList');
+
+    button.addEventListener('click', (e) => {
+        // 기본 이벤트 막기
+        e.preventDefault();
+
+        // 요소 생성 및 추가
+        const item = document.createElement('p');
+        item.textContent = input.value;
+
+        // 이 사이에 삭제 기능을 할 요소를 item에 추가 <span class="del">X</sapn>
+		// 삭제 버튼 관련 생성 및 이벤트 추가
+		const delItem = document.createElement('span');
+        delItem.textContent = 'X';
+        delItem.setAttribute('class', 'del')
+
+		// 삭제 이벤트 추가
+		delItem.addEventListener('click', (e) => {
+            // console.log(e.target.parentElement)
+            // e.target.parentElement.remove();
+            // e.target.parentNode.parentNode.removeChild(e.target.parentNode);
+			if (confirm(`삭제하시겠어요?`)) {
+                nameList.removeChild(e.target.parentNode);
+			}
+		})
+
+
+		item.appendChild(delItem);
+
+        // nameList.appendChild(item);
+        nameList.prepend(item); // 맨 앞에 요소를 넣음
+
+        // input 태그에서는 문자열이 사라짐
+        input.value = '';
+	})
+</script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="./css/main.css">
+</head>
+<body>
+<div id="container">
+  <h1>참가 신청</h1>
+  <form action="">
+    <input type="text" id="userName" placeholder="이름" required>
+    <button>신청</button>
+  </form>
+  <hr>
+  <div id="nameList"></div>
+</div>
+<script>
+  /* 참가 신청 명단 프로그램 만들기
+  4. 로컬스토로지 기능 추가
+  신청 명단을 배열 처리
+  1) 배열 생성
+
+  2) 명단 추가시에 배열에 추가 및 배열을 로컬 스토로지에 저장
+  -> 배열 추가시에 0번 인덱스에 추가 혹은 페이지 로딩시에 처리
+
+  명단 삭제시에 배열 반영
+
+  3) 배열출력을 함수화
+  -> 명단 추가와 페이지 로딩시 두 번 실행
+
+  4) 페이지 새로고침시 처리
+
+
+   */
+  //
+  const userNames = [];
+  const printUserNames = () => {
+    nameList.innerHTML = '';
+    userNames.forEach((userName) => {
+      // 요소 생성 및 추가
+      const item = document.createElement('p');
+      item.textContent = userName;
+
+      // 이 사이에 삭제 기능을 할 요소를 item에 추가 <span class="del">X</span>
+      // 삭제 버튼 관련 생성 및 이벤트 추가
+      const delItem = document.createElement('span');
+      delItem.textContent = 'X';
+      delItem.setAttribute('class', 'del')
+      delItem.addEventListener('click', (e) => {
+        // console.log(e.target.parentNode);
+        // e.target.parentNode.parentNode.removeChild(e.target.parentNode);
+        if (confirm('삭제하시겠어요?')) {
+          nameList.removeChild(e.target.parentNode);
+
+          // 삭제 저장
+          userNames.splice(index, 1);
+          localStorage.setItem('userNames', JSON.stringify(userNames));
+        }
+      })
+      item.appendChild(delItem);
+
+      // nameList.appendChild(item);
+      nameList.prepend(item); // 맨 앞에 요소를 넣음
+    })
+  }
+
+  // 요소 불러오기
+  const userName = document.getElementById('userName');
+  const button = document.querySelector('button');
+  const nameList = document.getElementById('nameList');
+
+  button.addEventListener('click', (e) => {
+    // 기본 이벤트 막기
+    e.preventDefault();
+
+    userNames.push(userName.value);
+    console.log(userNames);
+    localStorage.setItem('userNames', JSON.stringify(userNames));
+
+    printUserNames();
+
+    // input 태그에서는 문자열이 사라짐.
+    userName.value = '';
+  })
+
+  if (localStorage.getItem('userNames')) {
+    console.log(localStorage.getItem('userNames'));
+    JSON.parse(localStorage.getItem('userNames')).forEach((userName) => {
+      userNames.push(userName);
+    })
+    printUserNames();
+
+  }
+
+</script>
+</body>
+</html>

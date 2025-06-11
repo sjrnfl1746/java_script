@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<link rel="stylesheet" href="./css/main.css">
+</head>
+<body>
+<div id="container">
+	<h1>참가 신청</h1>
+	<form action="">
+		<input type="text" id="userName" placeholder="이름" required>
+		<button>신청</button>
+	</form>
+	<hr>
+	<div id="nameList"></div>
+</div>
+<script>
+    /* 참가 신청 명단 프로그램 만들기
+    4. 로컬스토리지 기능 추가
+    신청 명단을 배열 처리
+    1) 배열 생성
+
+    2) 명단 추가시에 배열에 추가 및 배열을 로컬 스토리지에 저장
+    -> 배열 추가시에 0번 인덱스에 추가 혹은 페이지 로딩 시 처리
+
+	명단 삭제시에 배열에 반영
+
+	3) 페이지 새로 고침시
+	 */
+
+	// 요소 불러오기
+	const button = document.querySelector('button');
+	const input = document.querySelector('input');
+    const nameList = document.getElementById('nameList');
+    let list = []
+
+    button.addEventListener('click', (e) => {
+        // 기본 이벤트 막기
+        e.preventDefault();
+
+        // 요소 생성 및 추가
+        const item = document.createElement('p');
+        item.textContent = input.value;
+        list.push(item.textContent);
+        console.log(list);
+
+        localStorage.setItem('list', JSON.stringify(list));
+
+        // 이 사이에 삭제 기능을 할 요소를 item에 추가 <span class="del">X</sapn>
+		// 삭제 버튼 관련 생성 및 이벤트 추가
+		const delItem = document.createElement('span');
+        delItem.textContent = 'X';
+        delItem.setAttribute('class', 'del')
+
+		// 삭제 이벤트 추가
+		delItem.addEventListener('click', (e) => {
+            // console.log(e.target.parentElement)
+            // e.target.parentElement.remove();
+            // e.target.parentNode.parentNode.removeChild(e.target.parentNode);
+			if (confirm(`삭제하시겠어요?`)) {
+                nameList.removeChild(e.target.parentNode);
+                console.log(list);
+			}
+		})
+
+        delItem.addEventListener('click', (e) => {
+            // console.log(e.target.parentElement)
+            // e.target.parentElement.remove();
+            // e.target.parentNode.parentNode.removeChild(e.target.parentNode);
+            if (confirm(`삭제하시겠어요?`)) {
+                nameList.removeChild(e.target.parentNode);
+                console.log(list);
+            }
+        })
+
+		item.appendChild(delItem);
+
+        // nameList.appendChild(item);
+        nameList.prepend(item); // 맨 앞에 요소를 넣음
+
+        // input 태그에서는 문자열이 사라짐
+        input.value = '';
+
+	})
+
+	if (localStorage.getItem('list')) {
+        console.log(localStorage.getItem('list'));
+        JSON.parse(localStorage.getItem('list')).forEach((item) => {
+            list.push(item);
+		})
+// 추가!!!
+	}
+</script>
+</body>
+</html>

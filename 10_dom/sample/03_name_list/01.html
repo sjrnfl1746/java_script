@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<link rel="stylesheet" href="./css/main.css">
+</head>
+<body>
+<div id="container">
+	<h1>참가 신청</h1>
+	<form action="">
+		<input type="text" id="userName" placeholder="이름" required>
+		<button>신청</button>
+	</form>
+	<hr>
+	<div id="nameList"></div>
+</div>
+<script>
+    /* 참가 신청 명단 프로그램 만들기
+	1. 새 노드 추가하고 표시하기
+	-> input 태그에 문자열을 입력하고 버튼을 클릭하면, nameList에 문자열이 추가되고
+	input 태그에서는 문자열이 사라짐.
+	 */
+	const button = document.querySelector('button');
+	const input = document.querySelector('input');
+    const nameList = document.getElementById('nameList');
+
+    button.addEventListener('click', (e) => {
+        // 기본 이벤트 막기
+        e.preventDefault();
+
+        // 요소 생성 및 추가
+        const p = document.createElement('p');
+        p.textContent = input.value;
+        nameList.appendChild(p);
+
+        // input 태그에서는 문자열이 사라짐
+        input.value = '';
+	})
+</script>
+</body>
+</html>
