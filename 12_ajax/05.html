@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+  <script>
+    // * 기본적인 ajax 통신 방식 함수화
+    const url = 'https://jsonplaceholder.typicode.com/posts/1'
+
+	function getJson (url, callback) {
+        const xhr = new XMLHttpRequest();
+
+        xhr.open('GET', url);
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState !== XMLHttpRequest.DONE) {
+                return;
+            }
+            if (xhr.status === 200) { // 서버(url)문서가 존재함
+                console.log(xhr.responseText);
+                callback(JSON.parse(xhr.responseText));
+            } else { // 정상적인 통신이 안된 경우, response 에서 문제가 있는 경우
+                console.error('Error', xhr.status, xhr.statusText);
+            }
+        }
+
+        xhr.send()
+	}
+
+    function callback (obj) {
+        console.log(obj)
+		document.write(obj.title) // obj 안에 title 출력
+	}
+
+    getJson(url, callback);
+
+  </script>
+</head>
+<body>
+
+</body>
+</html>

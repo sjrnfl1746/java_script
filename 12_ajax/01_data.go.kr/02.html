@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<script>
+        /*
+		1. 화면에 버튼 8개 생성 (중구, 동구, 서구, 남구, 북구, 수성구, 달서구, 달성군, 군위군)
+		2. 버튼을 클릭하면 해당 구의 날씨가 화면에 나오도록 코드 작성
+		중구: 89, 90 / 동구: 90, 91 / 서구: 88, 90 / 남구:89, 90 / 북구: 89, 91 / 수성구: 89, 90 / 달서구: 88, 90 / 달성군: 86, 88 / 군위군: 88, 99
+		 */
+        function getJson(url, callback) {
+            const xhr = new XMLHttpRequest();
+
+            xhr.open('GET', url);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState !== XMLHttpRequest.DONE) {
+                    return;
+                }
+                if (xhr.status === 200) { // 서버(url)문서가 존재함
+                    console.log(xhr.responseText);
+                    callback(JSON.parse(xhr.responseText));
+                } else { // 정상적인 통신이 안된 경우, response 에서 문제가 있는 경우
+                    console.error('Error', xhr.status, xhr.statusText);
+                }
+            }
+
+            xhr.send()
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const buttons = document.querySelectorAll('button');
+			let nx;
+            let ny;
+			buttons.forEach((button) => {
+                buttons.addEventListener('click', function () {
+                    if (buttons.textContent === '중구') {
+                        nx = 89
+                        ny = 90
+                    } else if (buttons.textContent === '동구') {
+                        nx = 90
+                        ny = 91
+                    } else if (buttons.textContent === '서구') {
+                        nx = 88
+                        ny = 90
+                    } else if (buttons.textContent === '남구') {
+                        nx = 89
+                        ny = 90
+                    } else if (buttons.textContent === '북구') {
+                        nx = 89
+                        ny = 91
+                    } else if (buttons.textContent === '수성구') {
+                        nx = 89
+                        ny = 90
+                    } else if (buttons.textContent === '달서구') {
+                        nx = 88
+                        ny = 90
+                    } else if (buttons.textContent === '달성군') {
+                        nx = 86
+                        ny = 88
+                    } else if (buttons.textContent === '군위군') {
+                        nx = 88
+                        ny = 99
+                    }
+                })
+            })
+
+            // 1. url 확인 (파라미터 완성)
+            function getUrl(nx, ny) {
+
+                // url 인코딩 된 키 사용.
+                const serviceKey = 'G%2BBObv2o7Q5Oc%2FMbRJ4x%2FS6Z7BX9Co6iN3N9mG8vYS1walZoXETSrW%2B%2FN55FlfLrHQz%2B0nGjcf9x1ZskUQpVNw%3D%3D';
+                const today = new Date();
+                const baseDate = `${today.getFullYear()}${('0' + (today.getMonth() + 1)).slice(-2)}${('0' + today.getDate()).slice(-2)}`;
+                // console.log(baseDate);
+                // getMonth : 0 ~ 11까지 출력 (+1을 해주면 1 ~ 12) / slice(-2) : 끝에 두자리만 출력 -> 012 => 12만 출력됨.
+                // 현재 분이 10분 미만이면 이전 시간(정시)을 설정.
+                let baseTime = today.getMinutes() < 10 ? `${today.getHours() - 1}00` : `${today.getHours()}00`;
+                // console.log(baseTime);
+
+                let params = `?serviceKey=${serviceKey}&numOfRows=10&pageNo=1`
+                params += `&base_date=${baseDate}&base_time=${baseTime}&nx=${nx}&ny=${ny}&dataType=JSON`
+                let url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst' + params;
+                console.log(url)
+
+                return url;
+            }
+
+            // 2. request
+            function callback(obj) {
+                // console.log(obj.response.body.items.item)
+                const items = obj.response.body.items.item;
+                console.log(items);
+
+                let jsonStr = `[발표 날짜: ${items[0]['baseDate']}]<br>`
+                jsonStr += `[발표 시간: ${items[0].baseTime}]<br><br>`
+                /*
+				T1H	기온	℃	10
+				RN1	1시간 강수량	mm	8
+				UUU	동서바람성분	m/s	12
+				VVV	남북바람성분	m/s	12
+				REH	습도	%	8
+				PTY	강수형태	코드값	4
+				VEC	풍향	deg	10
+				WSD	풍속	m/s	10
+				 */
+                items.forEach(item => {
+                    // jsonStr += `${item['category']} : ${item['obsrValue']}<br>`
+                    if (item['category'] === 'REH') {
+                        jsonStr += `* 습도: ${item['obsrValue']}%<br>`
+                    } else if (item['category'] === 'RN1') {
+                        jsonStr += `* 1시간 강수량: ${item['obsrValue']}mm<br>`
+                    } else if (item['category'] === 'T1H') {
+                        jsonStr += `* 기온: ${item['obsrValue']}℃<br>`
+                    }
+                })
+
+                document.querySelector('div').innerHTML = jsonStr;
+            }
+
+            getJson(getUrl(), callback);
+
+            /*
+			[발표 날짜: 20250612]
+			[발표 시간: 1000]
+
+			* 습도: 35%
+			* 1시간 강수량: 0[mm]
+			* 기온: 28.5[C]
+			 */
+        });
+
+
+	</script>
+</head>
+<body>
+<button>중구</button>
+<button>동구</button>
+<button>서구</button>
+<button>남구</button>
+<button>북구</button>
+<button>수성구</button>
+<button>달서구</button>
+<button>달성군</button>
+<button>군위군</button>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+  <script>
+    /*
+    Ajax를 활용한 비동기 통신은 다음과 같은 단계를 거침.
+    1) XMLHttpRequest 객체를 생성.
+    2) 서버와 통신할 때 사용할 처리 방법을 등록.
+    3) 요청을 전송하고, 통신을 시작.
+     */
+
+    // ajax를 이용해 데이터 가져오기.
+    const url = 'https://jsonplaceholder.typicode.com/posts/1'
+
+    // 1. XMLHttpRequest 객체 생성
+    const xhr = new XMLHttpRequest();
+
+    // 2. HTTP 요청 초기화. 통신 방식과 url 설정
+    xhr.open('GET', url); // 바뀌는 부분
+
+    // 3. 이벤트 등록
+    // XMLHttpRequest 객체의 readyState 프로퍼티 값이 변할 때 마다 자동으로 호출
+    xhr.onreadystatechange = function() {
+      // readyState 프로퍼티의 값이 DONE : 요청한 데이터의 처리가 완료되어 응답할 준비가 완료됨.
+      if (xhr.readyState !== XMLHttpRequest.DONE) { // DONE이 아닐경우 리턴
+        return;
+      }
+      // readyState 프로퍼티의 값이 DONE 일 경우에만 실행
+      if (xhr.status === 200) { // 서버(url)문서가 존재함
+        console.log(xhr.responseText); // 바뀌는 부분
+        console.log(JSON.parse(xhr.responseText)); // 바뀌는 부분
+      } else { // 정상적인 통신이 안된 경우, response 에서 문제가 있는 경우
+        console.error('Error', xhr.status, xhr.statusText);
+      }
+    }
+
+    // 4. url에 요청을 보냄
+    xhr.send()
+  </script>
+</head>
+<body>
+
+</body>
+</html>
