@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<style>
+		table{
+			border-collapse: collapse;
+			border: 1px solid black;
+		}
+		tr, th, td {
+			border-collapse: collapse;
+			border: 1px solid black;
+			padding: 20px;
+			text-align: center;
+		}
+	</style>
+	<script>
+        /*
+		공공데이터 포털에서 '인천국제공항공사_버스정보' 검색
+		https://www.data.go.kr/data/15095045/openapi.do
+		인천국제공항 여객터미널 T1,T2 버스 정보(공항행 첫차/막차,종점행 첫차/막차,성인요금,
+		버스등급,버스번호,지역,운수사,평일시간,주말시간,노선정보,승차위치)를 제공
+
+		-> 대구로 오는 버스노선만 테이블 형식으로 출력
+		버스번호, 버스등급, 성인요금, 평일시간표, 주말시간표 순서
+		시간표는 이른 시간이 먼저 나오도록
+		 */
+
+        // step2 - url 구하기 함수화. api 호출해서 json 출력
+        // http://apis.data.go.kr/B551177/BusInformation/getBusInfo?serviceKey=서비스키&numOfRows=10&pageNo=1&area=1&type=xml
+
+
+        // console.log(location.href = url);
+
+
+        const getUrl = () => {
+            const servicekey = 'G%2BBObv2o7Q5Oc%2FMbRJ4x%2FS6Z7BX9Co6iN3N9mG8vYS1walZoXETSrW%2B%2FN55FlfLrHQz%2B0nGjcf9x1ZskUQpVNw%3D%3D'
+            const params = `?serviceKey=${servicekey}` +
+                '&numOfRows=100' +
+                '&pageNo=1' +
+                '&area=6' +
+                '&type=json'
+            const url = 'http://apis.data.go.kr/B551177/BusInformation/getBusInfo' + params;
+            return url;
+        }
+
+        function getJson(url, callback) {
+            const xhr = new XMLHttpRequest();
+
+            xhr.open('GET', url);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState !== XMLHttpRequest.DONE) {
+                    return;
+                }
+                if (xhr.status === 200) { // 서버(url)문서가 존재함
+                    console.log(xhr.responseText);
+                    callback(JSON.parse(xhr.responseText));
+                } else { // 정상적인 통신이 안된 경우, response 에서 문제가 있는 경우
+                    console.error('Error', xhr.status, xhr.statusText);
+                }
+            }
+
+            xhr.send()
+        }
+
+        function callback(obj) {
+            console.log(obj.response.body.items);
+            // 1. 배열 구하고 출력
+            const items = obj.response.body.items;
+            items.forEach(item => {
+                console.log(item);
+            })
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            getJson(getUrl(), callback);
+
+        });
+        /*
+        버스번호 busnumber
+        버스등급 busclass
+        성인요금 adultfare
+        평일시간표 t1wdayt
+        주말시간표 t1wt
+         */
+	</script>
+</head>
+<body>
+<table>
+	<thead>
+	<tr>
+		<th>버스번호</th>
+		<th>버스등급</th>
+		<th>성인요금</th>
+		<th>평일시간표</th>
+		<th>주말시간표</th>
+	</tr>
+	</thead>
+	<tbody>
+
+	</tbody>
+</table>
+</body>
+</html>

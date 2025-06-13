@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<style>
+		table {
+			border-collapse: collapse;
+            border: 1px solid black;
+		}
+		th, tr, td {
+            border-collapse: collapse;
+            border: 1px solid black;
+            padding: 20px;
+            text-align: center;
+		}
+	</style>
+	<script>
+        /*
+			공공데이터 포털에서 '인천국제공항공사_여객편 주간 운항 현황' 검색
+			https://www.data.go.kr/data/15095074/openapi.do
+			항공사, 편명, 예정시간, 도착지공항 을 테이블로 출력
+
+			* 응답 메시지
+			airline : 항공사 예)대한항공
+			flightId : 편명 예) KE093
+			scheduleDateTime : 예정시간 예) 202111051015
+			airport : 도착지공항 예) 워싱턴
+
+			* 가고싶은 여행지 5곳을 선택하여,
+			여행지를 클릭하면 여행지로 도착하는 주간 운항 현황을 출력
+
+			step1 - url 구하기 (대표 여행지 하나)
+			step2 - url 구하기 함수화, api 호출해서 json 출력
+			step3 - json 데이터를 html로 출력
+			step4 - 여행지 5곳 버튼 생성 및 클릭 구현
+		 */
+
+		document.addEventListener('DOMContentLoaded', function () {
+
+            // 여행지 결정
+            const tourSpots = [
+                {name: '마드리드', airportCode: 'MAD'},
+                {name: '바르셀로나', airportCode: 'BCN'},
+                {name: '뮌헨', airportCode: 'MUC'},
+                {name: '취리히', airportCode: 'ZRH'},
+                {name: '시애틀', airportCode: 'SEA'}
+            ]
+			// 완료
+
+			// 버튼 생성
+			tourSpots.forEach(tourSpots => {
+                const button = document.createElement('button');
+                button.textContent = tourSpots.name;
+                button.style.padding = '5px';
+                button.style.margin = '5px';
+                button.style.cursor = 'pointer';
+
+                // 버튼 이벤트 추가!!!!(미완)
+				button.addEventListener('click', function () {
+                    getJson(getUrl(tourSpots.airportCode), callback)
+				})
+
+                document.querySelector('div').appendChild(button);
+			})
+			// 완료
+
+			// getJson
+            function getJson(url, callback) {
+                const xhr = new XMLHttpRequest();
+
+                xhr.open('GET', url);
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState !== XMLHttpRequest.DONE) {
+                        return;
+                    }
+                    if (xhr.status === 200) { // 서버(url)문서가 존재함
+                        console.log(xhr.responseText);
+                        callback(JSON.parse(xhr.responseText));
+                    } else { // 정상적인 통신이 안된 경우, response 에서 문제가 있는 경우
+                        console.error('Error', xhr.status, xhr.statusText);
+                    }
+                }
+
+                xhr.send()
+            }
+            // 완료
+
+			// url 확인(O)
+			function getUrl(airportCode) {
+                // 서비스 키
+                const servicekey = 'G%2BBObv2o7Q5Oc%2FMbRJ4x%2FS6Z7BX9Co6iN3N9mG8vYS1walZoXETSrW%2B%2FN55FlfLrHQz%2B0nGjcf9x1ZskUQpVNw%3D%3D'
+
+                let parmas = `?serviceKey=${servicekey}` +
+                    `&airport_code=${airportCode}` +
+                    `&type=json`
+
+                let url = 'http://apis.data.go.kr/B551177/StatusOfPassengerFlightsDSOdp/getPassengerArrivalsDSOdp' + parmas;
+                // location.href = url;
+
+                return url;
+			}
+            // 완료
+
+			function callback(obj) {
+                const thead = document.querySelector('thead');
+                const tbody = document.querySelector('tbody');
+                thead.innerHTML = '';
+                tbody.innerHTML = '';
+                console.log(obj.response.body.items);
+                // 배열구하기
+				const items = obj.response.body.items;
+                items.forEach(item => {
+                    console.log(item);
+				})
+
+				// tbody안에 tr 출력
+                items.forEach(item => {
+                    const th = document.createElement('th');
+                    const tr = document.createElement('tr');
+                    th.innerHTML = `
+                    <th>항공사</th>
+                    <th>편명</th>
+                    <th>예정시간</th>
+                    <th>도착지항공</th>
+                    `
+                    tr.innerHTML = `
+                    <td>${item.airline}</td>
+                    <td>${item.flightId}</td>
+                    <td>${item.scheduleDateTime}</td>
+                    <td>${item.airport}</td>
+                    `
+					thead.appendChild(th);
+					tbody.appendChild(tr);
+				})
+			}
+		})
+	</script>
+</head>
+<body>
+<div>
+
+</div>
+<table>
+	<thead>
+
+	</thead>
+	<tbody>
+
+	</tbody>
+</table>
+</body>
+</html>
