@@ -104,7 +104,9 @@
             // 완료
 
 			function callback(obj) {
+                const thead = document.querySelector('thead');
                 const tbody = document.querySelector('tbody');
+                thead.innerHTML = '';
                 tbody.innerHTML = '';
                 console.log(obj.response.body.items);
                 // 배열구하기
@@ -115,13 +117,21 @@
 
 				// tbody안에 tr 출력
                 items.forEach(item => {
+                    const th = document.createElement('th');
                     const tr = document.createElement('tr');
+                    th.innerHTML = `
+                    <th>항공사</th>
+                    <th>편명</th>
+                    <th>예정시간</th>
+                    <th>도착지항공</th>
+                    `
                     tr.innerHTML = `
                     <td>${item.airline}</td>
                     <td>${item.flightId}</td>
                     <td>${item.scheduleDateTime}</td>
                     <td>${item.airport}</td>
                     `
+					thead.appendChild(th);
 					tbody.appendChild(tr);
 				})
 			}
