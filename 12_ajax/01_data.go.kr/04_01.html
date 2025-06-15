@@ -115,23 +115,24 @@
                     console.log(item);
 				})
 
-				// tbody안에 tr 출력
-                items.forEach(item => {
-                    const th = document.createElement('th');
-                    const tr = document.createElement('tr');
-                    th.innerHTML = `
+				const header = document.createElement('tr');
+				header.innerHTML = `
                     <th>항공사</th>
                     <th>편명</th>
                     <th>예정시간</th>
                     <th>도착지항공</th>
                     `
+				thead.appendChild(header);
+
+				// tbody안에 tr 출력
+                items.forEach(item => {
+                    const tr = document.createElement('tr');
                     tr.innerHTML = `
                     <td>${item.airline}</td>
                     <td>${item.flightId}</td>
                     <td>${item.scheduleDateTime}</td>
                     <td>${item.airport}</td>
                     `
-					thead.appendChild(th);
 					tbody.appendChild(tr);
 				})
 			}
