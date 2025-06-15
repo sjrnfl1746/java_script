@@ -21,7 +21,18 @@
 		2024-11-10: 13°C, scattered clouds
 		2024-11-11: 12°C, rain
 		2024-11-12: 14°C, clear sky
+
+		const city = 'Taegu'
+        const url = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${apiKey}`
+
 		 */
+
+		const city = 'Taegu'
+		const apiKey = `bdbcfc94d985a0cbd9272274a76a46f7`
+		let url = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${apiKey}`
+		console.log(url)
+		location.href = url;
+
 	</script>
 </head>
 <body>
