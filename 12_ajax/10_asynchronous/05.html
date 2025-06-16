@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+  <script>
+    /*
+    Promise는 비동기 처리를 실행하고 그 처리가 끝난 후에 다음 처리를 실행하기 위한 용도로 사용.
+    Promise를 사용하려면 먼저 Promise 객체를 생성해야 함.
+
+    * Promise 생성자의 사용법.
+    const promise = new Promise(function(resolve, reject) {
+
+    });
+     */
+    const promise = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        console.log('A')
+        resolve()
+      }, 1000);
+    })
+    promise.then(() => {console.log('B')})
+  </script>
+</head>
+<body>
+
+</body>
+</html>

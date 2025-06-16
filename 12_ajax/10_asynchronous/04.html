@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<script>
+        const get = url => {
+            return new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', url);
+                xhr.send();
+
+                xhr.onload = () => {
+                    if (xhr.status === 200) {
+                        // 성공적으로 응답을 받으면 resolve 함수를 호출
+                        console.log(JSON.parse(xhr.response));
+                        resolve(JSON.parse(xhr.response));
+                    } else {
+                        // 에러 처리를 위해 reject 함수를 호출
+                        console.error(`${xhr.status} ${xhr.statusText}`);
+                        reject(JSON.parse(xhr.status));
+                    }
+                }
+            })
+        }
+        const promise = get('https://jsonplaceholder.typicode.com/posts/1');
+        promise.then(() => {
+            console.log('순서 확인용');
+        })
+
+	</script>
+</head>
+<body>
+
+</body>
+</html>
