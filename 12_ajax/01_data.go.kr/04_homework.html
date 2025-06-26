@@ -4,11 +4,11 @@
 	<meta charset="UTF-8">
 	<title>Title</title>
 	<script>
-		/*
+        /*
 		openweathermap.org
-        * 대구 날씨 구하기
+		* 대구 날씨 구하기
 
-        * OpenWeatherMap API를 이용하여 특정 도시의 5일간의 날씨 예보를 가져오는 프로그램을 작성하세요.
+		* OpenWeatherMap API를 이용하여 특정 도시의 5일간의 날씨 예보를 가져오는 프로그램을 작성하세요.
 		1. 사용자가 페이지의 유럽 5개 도시 중 하나를 선택하면 해당 도시의 5일간 날씨 예보를 가져오세요.
 		2. 5일 동안의 날씨 예보 중 매일 정오(12:00)에 해당하는 데이터만 출력하세요.
 		1) 날짜 2) 온도 3) 날씨 설명 (예: clear sky, few clouds 등)
@@ -23,19 +23,113 @@
 		2024-11-12: 14°C, clear sky
 
 		const city = 'Taegu'
-        const url = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${apiKey}`
+		const url = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${apiKey}`
 
 		 */
 
-		const city = 'Taegu'
-		const apiKey = `bdbcfc94d985a0cbd9272274a76a46f7`
-		let url = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${apiKey}`
-		console.log(url)
-		location.href = url;
+
+        // location.href = url;
+
+		document.addEventListener('DOMContentLoaded', () => {
+            // 여행지 결정
+            const tourSpots = [
+                {q: 'Seoul'},
+                {q: 'Busan'},
+                {q: 'Daegu'},
+            ]
+            // 완료
+
+            // 버튼 생성
+            tourSpots.forEach(tourSpots => {
+                const button = document.createElement('button');
+                button.textContent = tourSpots.q;
+                button.style.padding = '5px';
+                button.style.margin = '5px';
+                button.style.cursor = 'pointer';
+
+                // 버튼 이벤트 추가!!!!(미완)
+                button.addEventListener('click', function () {
+                    getJson(getUrl(tourSpots.q), callback)
+                })
+
+                document.querySelector('div').appendChild(button);
+            })
+            // 완료
+
+
+
+
+
+            function getJson(url, callback) {
+                const xhr = new XMLHttpRequest();
+
+                xhr.open('GET', url);
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState !== XMLHttpRequest.DONE) {
+                        return;
+                    }
+                    if (xhr.status === 200) { // 서버(url)문서가 존재함
+                        console.log(xhr.responseText);
+                        callback(JSON.parse(xhr.responseText));
+                    } else { // 정상적인 통신이 안된 경우, response 에서 문제가 있는 경우
+                        console.error('Error', xhr.status, xhr.statusText);
+                    }
+                }
+
+                xhr.send()
+            }
+
+
+            // 1. url 확인 (파라미터 완성)
+            function getUrl(q) {
+
+                // getURl
+                const apiKey = `bdbcfc94d985a0cbd9272274a76a46f7`
+                let url = `https://api.openweathermap.org/data/2.5/weather?q=${q},kr&appid=${apiKey}`
+                console.log(url);
+
+                return url;
+            }
+
+            // 2. request
+            function callback(obj) {
+                console.log(obj)
+                const tbody = document.querySelector('tbody');
+                tbody.innerHTML = '';
+
+                const temp = (obj.main.temp - 273.15).toFixed(2);
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+				<td>지역 : ${obj.name}</td>
+				<td>날씨 : ${obj.weather[0].main}</td>
+				<td>화씨온도 : ${temp}℃</td>
+				`
+
+                tbody.appendChild(tr);
+            }
+
+
+		})
+
+
+
+
 
 	</script>
 </head>
 <body>
+<div>
 
+</div>
+<table>
+	<thead>
+
+	</thead>
+	<tbody>
+
+	</tbody>
+</table>
 </body>
 </html>
