@@ -32,7 +32,7 @@
 
 		document.addEventListener('DOMContentLoaded', () => {
             // 여행지 결정
-            const tourSpots = [
+            const tourSpots = [ // q : 지역 이름
                 {q: 'Seoul'},
                 {q: 'Busan'},
                 {q: 'Daegu'},
@@ -98,10 +98,10 @@
                 const tbody = document.querySelector('tbody');
                 tbody.innerHTML = '';
 
-                const temp = (obj.main.temp - 273.15).toFixed(2);
-                const year = new Date().getFullYear();
-                const month = new Date().getMonth() + 1;
-                const date = new Date().getDate();
+                const temp = (obj.main.temp - 273.15).toFixed(2); // to.Fixed(2) 소수점 두자리수까지 출력
+                const year = new Date().getFullYear(); // 년도
+                const month = new Date().getMonth() + 1; // 월
+                const date = new Date().getDate(); // 일
 
 
                 const tr = document.createElement('tr');
