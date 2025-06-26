@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>날씨 정보</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+<h1>도시 날씨 조회</h1>
+<input type="text" id="city" placeholder="도시명을 입력하세요">
+<button onclick="fetchWeather()">날씨 확인</button>
+<!--날씨정보과 예보 결과가 들어갈 공간-->
+<div id="weather"></div>
+<div id="forecast"></div>
+
+<script>
+  //날씨 상태에 따라 배경색을 바꿔주는 함수입니다. 만약 알 수 없는 상태라면 기본 배경색을 적용
+  function setBackgroundByWeather(condition) {
+    const colors = {
+      Clear: '#ffe37c',
+      Clouds: '#dbeafe',
+      Rain: '#c7d2fe',
+      Snow: '#f0f9ff',
+      Default: '#fafaf6'
+    };
+    document.body.style.backgroundColor = colors[condition] || colors.Default;
+  }
+
+  const API_KEY = '87bea953c14e57efdd02b9da14c4862b'; // OpenWeatherMap API 키 입력
+
+  async function fetchWeather() { //비동기 함수로, 날씨 정보를 가져오는 역할
+    const city = document.getElementById("city").value; //입력한 도시명을 city 변수에 저장
+    const weatherDiv = document.getElementById("weather");
+    const forecastDiv = document.getElementById("forecast"); //날씨와 예보 정보를 표시할 DOM 요소를 변수에 저장
+    weatherDiv.innerHTML = '';
+    forecastDiv.innerHTML = ''; //이전 결과가 있다면 지우고 새로 출력하기 위해 초기화
+
+    try { //도시명으로 위도/경도를 가져옵니다. limit: 1은 첫 번째 결과만 가져오겠다는 의미
+      const geoRes = await axios.get('https://api.openweathermap.org/geo/1.0/direct', {
+        params: {
+          q: city,
+          limit: 1,
+          appid: API_KEY
+        }
+      });
+      //결과가 없으면 “도시를 찾을 수 없습니다”를 출력하고 함수 종료.
+      if (geoRes.data.length === 0) {
+        weatherDiv.innerHTML = '도시를 찾을 수 없습니다.';
+        return;
+      }
+      //첫 번째 검색 결과에서 위도(lat), 경도(lon), 도시명(name)을 꺼냅니다
+      const { lat, lon, name } = geoRes.data[0];
+
+      //위도와 경도를 이용해 현재 날씨 데이터를 받아옵니다.
+      //units: 'metric'은 섭씨 기준, lang: 'kr'은 한글 출력
+      const currentRes = await axios.get('https://api.openweathermap.org/data/2.5/weather', {
+        params: {
+          lat,
+          lon,
+          appid: API_KEY,
+          units: 'metric',
+          lang: 'kr'
+        }
+      });
+
+      //응답 데이터에서 전체 정보와 날씨 상태(Clear, Rain 등)를 추출
+      const current = currentRes.data;
+      const weatherCondition = current.weather[0].main;
+
+      //날씨 상태에 따라 배경색을 바꿔주는 함수 호출
+      setBackgroundByWeather(weatherCondition);
+
+      //현재 날씨를 HTML 형태로 출력
+      /*
+        •	직접 innerHTML에 전체 내용을 문자열로 한 번에 넣음
+        •	구조가 단순하고 한 번만 출력하니까 효율적
+        •	반복문도 필요 없음 (예보처럼 여러 항목이 아니므로)
+       */
+      weatherDiv.innerHTML = `
+        <h2>현재 날씨</h2>
+        <p>도시: ${name}</p>
+        <p>위도: ${lat}, 경도: ${lon}</p>
+        <p>온도: ${current.main.temp}°C</p>
+        <p>상태: ${weatherCondition}</p>
+      `;
+
+      //예보 목록 중 첫 번째 데이터를 사용
+      /*
+      	•	forecast에는 3시간 단위로 수십 개의 예보가 있음
+        •	지금은 하나만 보여주지만, 반복문을 써서 여러 개 출력하도록 확장 가능하게 구조를 짠 것
+        •	showForecast(data) 같은 함수로 감싸 두면 재사용과 유연성이 좋아짐
+       */
+      function showForecast(data) {
+        const item = data.list[0];
+        const time = item.dt_txt;
+        const temp = item.main.temp;
+        const condition = item.weather[0].main;
+        //예보 정보를 HTML로 구성.
+        const html = `
+        <h2>예보 정보</h2>
+        <div class="forecast-item">
+          <p>날짜/시간: ${time}</p>
+          <p>예상 온도: ${temp}°C</p>
+          <p>예상 상태: ${condition}</p>
+          <br>
+        </div>
+      `;
+        // 예보 정보 표시
+        document.getElementById('forecast').innerHTML = html;
+      }
+      //해당 위치의 3시간 단위 예보 데이터를 가져옵니다.
+      const forecastRes = await axios.get('https://api.openweathermap.org/data/2.5/forecast', {
+        params: {
+          lat,
+          lon,
+          appid: API_KEY,
+          units: 'metric',
+          lang: 'kr'
+        }
+      });
+      //예보 데이터를 출력하는 함수 호출
+      showForecast(forecastRes.data);
+    //API 요청 중 문제가 생기면 콘솔에 출력하고 사용자에게 오류 메시지를 보여줍니다.
+    } catch (error) {
+      console.error(error);
+      weatherDiv.innerHTML = '날씨 정보를 불러오는 중 오류가 발생했습니다.';
+    }
+  }
+
+</script>
+</body>
+</html>
