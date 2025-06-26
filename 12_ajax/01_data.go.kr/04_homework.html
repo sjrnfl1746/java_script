@@ -99,12 +99,17 @@
                 tbody.innerHTML = '';
 
                 const temp = (obj.main.temp - 273.15).toFixed(2);
+                const year = new Date().getFullYear();
+                const month = new Date().getMonth() + 1;
+                const date = new Date().getDate();
+
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
+				<td>시간 : ${year}년 ${month}월 ${date}일</td>
 				<td>지역 : ${obj.name}</td>
 				<td>날씨 : ${obj.weather[0].main}</td>
-				<td>화씨온도 : ${temp}℃</td>
+				<td>온도 : ${temp}℃</td>
 				`
 
                 tbody.appendChild(tr);
