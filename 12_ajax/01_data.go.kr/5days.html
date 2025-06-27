@@ -3,49 +3,12 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Title</title>
-	<style>
-        table {
-            border-collapse: collapse;
-            border: 1px solid black;
-        }
-
-        th, tr, td {
-            border-collapse: collapse;
-            border: 1px solid black;
-            padding: 20px;
-            text-align: center;
-        }
-	</style>
 	<script>
-        /*
-		openweathermap.org
-		* 대구 날씨 구하기
-
-		* OpenWeatherMap API를 이용하여 특정 도시의 5일간의 날씨 예보를 가져오는 프로그램을 작성하세요.
-		1. 사용자가 페이지의 유럽 5개 도시 중 하나를 선택하면 해당 도시의 5일간 날씨 예보를 가져오세요.
-		2. 5일 동안의 날씨 예보 중 매일 정오(12:00)에 해당하는 데이터만 출력하세요.
-		1) 날짜 2) 온도 3) 날씨 설명 (예: clear sky, few clouds 등)
-		요청 실패 시, 에러 메시지를 출력하세요.
-		3.	AJAX 요청을 사용하여 구현하세요.
-
-		ex)
-		2024-11-08: 15°C, clear sky
-		2024-11-09: 17°C, few clouds
-		2024-11-10: 13°C, scattered clouds
-		2024-11-11: 12°C, rain
-		2024-11-12: 14°C, clear sky
-
-		const city = 'Taegu'
-		const url = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${apiKey}`
-
-		 */
-
-
 
         const getUrl = () => {
-            const apiKey = `bdbcfc94d985a0cbd9272274a76a46f7`
-            const q = 'Seoul'
-            let url = `https://api.openweathermap.org/data/2.5/forecast?q=${q}&appid=${apiKey}`
+            const apiKey = `bdbcfc94d985a0cbd9272274a76a46f7` // api 키
+            const q = 'Seoul' // 도시 - 서울
+            let url = `https://api.openweathermap.org/data/2.5/forecast?q=${q}&appid=${apiKey}` // 5일간의 날씨를 받아옴
 			return url;
         }
 
@@ -71,32 +34,13 @@
 
         function callback(obj) {
             console.log(obj); // 콘솔창에 obj 출력
-            // 1. 배열 구하고 출력
+			// console.log(obj.city.name); // 콘솔창에 Seoul 출력
         }
 
         document.addEventListener('DOMContentLoaded', function () {
             getJson(getUrl(), callback);
 
         });
-
-
-
-
-
-        // // 여행지 결정
-        // const citys = [ // q : 지역 이름
-        //     {q: 'Seoul'},
-        //     {q: 'Tokyo'},
-        //     {q: 'New York'},
-        //     {q: 'London'},
-        //     {q: 'Paris'},
-        //     {q: 'Sydney'},
-        //     {q: 'Cairo'},
-        // ]
-        // 완료
-
-
-        // getURl
 
 
 

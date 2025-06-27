@@ -35,7 +35,7 @@
         document.addEventListener('DOMContentLoaded', () => {
 
             // 도시 설정
-            const citys = [ // q : 지역 이름
+            const citys = [ // q : 도시 이름
                 {q: 'Seoul'},
                 {q: 'Tokyo'},
                 {q: 'New York'},
@@ -46,7 +46,7 @@
             ]
 
 			// 배경색 변화시키는 함수
-            function setBackgroundByWeather(weather) {
+            function setBackgroundByWeather(weather) { // 매개변수로 weather을 받음
                 const colors = {
                     Clear: '#fef3c7',
                     Clouds: '#dbeafe',
@@ -101,7 +101,7 @@
 
 
             // 현재 날씨 구하는 url
-            function getUrl1(q) {
+            function getUrl1(q) { // 도시이름 q를 받아옴
 
                 // getURl
                 const apiKey = `bdbcfc94d985a0cbd9272274a76a46f7`
@@ -113,28 +113,30 @@
 
             // 현재 날씨 구하는 콜백함수
             function callback1(obj) {
-                const date = new Date();
+                const date = new Date(); // 현재 날짜를 받아옴
+
                 console.log(obj)
-				const thead1 = document.getElementById('nowH');
-                const tbody1 = document.getElementById('now');
-                const nowState = document.getElementById('nowList');
+				const thead1 = document.getElementById('nowH'); // id가 nowH인 thead
+                const tbody1 = document.getElementById('now'); // id가 now인 tbody
+                const nowState = document.getElementById('nowList'); // id가 nowList인 h1태그
                 thead1.innerHTML = '';
                 tbody1.innerHTML = '';
                 nowState.innerHTML = '';
 
-                const year = date.getFullYear();
-                const month = date.getMonth() + 1;
-                const day = date.getDate();
-                const now = year + '년 ' + month + '월 ' + day + '일 '; // 현재 날짜
+                const year = date.getFullYear(); // 현재날짜에서 년도를 받아옴
+                const month = date.getMonth() + 1; // 현재날짜에서 월을 받아옴
+                const day = date.getDate(); // 현재날짜에서 일을 받아옴
+                const now = year + '년 ' + month + '월 ' + day + '일 '; // 현재 날짜(년, 월, 일)
 				const cityName = obj.name; // 도시 이름
 				const lat = obj.coord.lat; // 위도
 				const lon = obj.coord.lon; // 경도
                 const temp = (obj.main.temp - 273.15).toFixed(2); // 온도 : 절대온도 -> 섭씨온도로 변환 후 소수점 두자리까지만 출력
-				const weather = obj.weather[0].main;
+				const weather = obj.weather[0].main; // 날씨 상태
 
                 nowState.innerHTML = '현재 날씨예보';
 
                 const nowHeader = document.createElement('tr')
+
 				nowHeader.innerHTML = `
 				<th>날짜</th>
 				<th>도시 이름</th>
@@ -191,10 +193,10 @@
 				`
 				thead2.appendChild(fiveHeader)
 
-                for (let i = 0; i <= 40; i++) {
+                for (let i = 0; i <= 40; i++) { // 40 -> obj안에 list의 배열 수
                     const tr2 = document.createElement('tr');
                     const days = obj.list[i].dt_txt; // 5일동안의 날짜
-                    const temp = (obj.list[i].main.temp - 273.15).toFixed(2); // 온도 : 절대온도 -> 섭씨온도로 변환 후 소수점 두자리까지만 출력
+                    const temp = (obj.list[i].main.temp - 273.15).toFixed(2);
                     const weather = obj.list[i].weather[0].main;
 
                     tr2.innerHTML = `
