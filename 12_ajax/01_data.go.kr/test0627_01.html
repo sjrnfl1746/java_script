@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			text-align: center;
+		}
+		body {
+			display: flex;
+			flex-direction: column;
+		}
+        table {
+            border-collapse: collapse;
+            border: 1px solid black;
+			margin: 40px;
+        }
+        th, tr, td {
+            border-collapse: collapse;
+            border: 1px solid black;
+            padding: 20px;
+            text-align: center;
+        }
+		th {
+			background-color: #276da8;
+			color: white;
+		}
+	</style>
+	<script>
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // 도시 설정
+            const citys = [ // q : 지역 이름
+                {q: 'Seoul'},
+                {q: 'Tokyo'},
+                {q: 'New York'},
+                {q: 'London'},
+                {q: 'Paris'},
+                {q: 'Sydney'},
+                {q: 'Cairo'},
+            ]
+
+			// 배경색 변화시키는 함수
+            function setBackgroundByWeather(weather) {
+                const colors = {
+                    Clear: '#fef3c7',
+                    Clouds: '#dbeafe',
+                    Rain: '#c7d2fe',
+                    Snow: '#f0f9ff',
+                    Default: '#f3f4f6'
+                };
+                document.body.style.backgroundColor = colors[weather] || colors.Default;
+            }
+
+            // 버튼 생성
+            citys.forEach(citys => {
+                const button = document.createElement('button');
+                button.textContent = citys.q;
+                button.style.padding = '16px 20px';
+                button.style.margin = '10px';
+                button.style.backgroundColor = 'grey';
+                button.style.borderRadius = '5px';
+                button.style.border = 'none';
+                button.style.color = 'white';
+                button.style.fontSize = '16px';
+                button.style.cursor = 'pointer';
+
+                // 버튼 이벤트 추가
+                button.addEventListener('click', function () {
+                    getJson(getUrl1(citys.q), callback1) // 현재 날씨
+					getJson(getUrl2(citys.q), callback2) // 5일간 날씨
+                })
+
+                document.getElementById('button').appendChild(button);
+            })
+
+            // getJson
+            function getJson(url, callback) {
+                const xhr = new XMLHttpRequest();
+
+                xhr.open('GET', url);
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState !== XMLHttpRequest.DONE) {
+                        return;
+                    }
+                    if (xhr.status === 200) { // 서버(url)문서가 존재함
+                        console.log(xhr.responseText);
+                        callback(JSON.parse(xhr.responseText));
+                    } else { // 정상적인 통신이 안된 경우, response 에서 문제가 있는 경우
+                        console.error('Error', xhr.status, xhr.statusText);
+                    }
+                }
+                xhr.send()
+            }
+
+
+            // 현재 날씨 구하는 url
+            function getUrl1(q) {
+
+                // getURl
+                const apiKey = `bdbcfc94d985a0cbd9272274a76a46f7`
+                let url = `https://api.openweathermap.org/data/2.5/weather?q=${q}&appid=${apiKey}`
+                console.log(url);
+
+                return url;
+            }
+
+            // 현재 날씨 구하는 콜백함수
+            function callback1(obj) {
+                const date = new Date();
+                console.log(obj)
+				const thead1 = document.getElementById('nowH');
+                const tbody1 = document.getElementById('now');
+                const nowState = document.getElementById('nowList');
+                thead1.innerHTML = '';
+                tbody1.innerHTML = '';
+                nowState.innerHTML = '';
+
+                const year = date.getFullYear();
+                const month = date.getMonth() + 1;
+                const day = date.getDate();
+                const now = year + '년 ' + month + '월 ' + day + '일 '; // 현재 날짜
+				const cityName = obj.name; // 도시 이름
+				const lat = obj.coord.lat; // 위도
+				const lon = obj.coord.lon; // 경도
+                const temp = (obj.main.temp - 273.15).toFixed(2); // 온도 : 절대온도 -> 섭씨온도로 변환 후 소수점 두자리까지만 출력
+				const weather = obj.weather[0].main;
+
+                nowState.innerHTML = '현재 날씨예보';
+
+                const nowHeader = document.createElement('tr')
+				nowHeader.innerHTML = `
+				<th>날짜</th>
+				<th>도시 이름</th>
+				<th>위도 / 경도</th>
+				<th>현재 온도</th>
+				<th>날씨 상태</th>
+				`
+
+                thead1.appendChild(nowHeader);
+
+                const tr1 = document.createElement('tr');
+                tr1.innerHTML = `
+				<td><b>${now}</b></td>
+				<td>${cityName}</td>
+				<td>${lat}° / ${lon}°</td>
+				<td>${temp}℃</td>
+				<td>${weather}</td>
+				`
+
+                tbody1.appendChild(tr1);
+                setBackgroundByWeather(weather);
+            }
+
+
+
+            // 5일간 날씨 구하는 url
+            function getUrl2(q) {
+
+                // getURl
+                const apiKey = `bdbcfc94d985a0cbd9272274a76a46f7`
+                let url = `https://api.openweathermap.org/data/2.5/forecast?q=${q}&appid=${apiKey}`
+                console.log(url);
+
+                return url;
+            }
+
+            // 5일간 날씨 구하는 콜백 함수
+            function callback2(obj) {
+                console.log(obj)
+                const thead2 = document.getElementById('fiveH');
+                const tbody2 = document.getElementById('five');
+                const fiveState = document.getElementById('fiveList');
+                thead2.innerHTML = '';
+                tbody2.innerHTML = '';
+                fiveState.innerHTML = '';
+
+                fiveState.innerHTML = '5일간 날씨예보';
+
+                const fiveHeader = document.createElement('tr');
+                fiveHeader.innerHTML = `
+				<th>날짜</ht>
+				<th>예상 온도</th>
+				<th>날씨 상태</th>
+				`
+				thead2.appendChild(fiveHeader)
+
+                for (let i = 0; i <= 40; i++) {
+                    const tr2 = document.createElement('tr');
+                    const days = obj.list[i].dt_txt; // 5일동안의 날짜
+                    const temp = (obj.list[i].main.temp - 273.15).toFixed(2); // 온도 : 절대온도 -> 섭씨온도로 변환 후 소수점 두자리까지만 출력
+                    const weather = obj.list[i].weather[0].main;
+
+                    tr2.innerHTML = `
+				<td><b>${days}</b></td>
+				<td>${temp}℃</td>
+				<td>${weather}</td>
+				`
+                    tbody2.appendChild(tr2);
+                }
+            }
+
+        })
+
+	</script>
+</head>
+<body>
+<div id="button">
+
+</div>
+	<h1 id="nowList">
+
+	</h1>
+<table>
+	<thead id="nowH">
+
+	</thead>
+	<tbody id="now">
+
+	</tbody>
+</table>
+	<h1 id="fiveList">
+
+	</h1>
+<table>
+	<thead id="fiveH">
+
+	</thead>
+	<tbody id="five">
+
+	</tbody>
+</table>
+</body>
+</html>
